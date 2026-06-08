@@ -18,7 +18,7 @@ export async function GET(req: Request){
    const bookmarks = await prisma.bookmark.findMany({
     where: {
       authorId: session?.user.id,
-      archived: false,
+      archived: true,
       ...(tag && {
         tags: {
           some: { title: tag }

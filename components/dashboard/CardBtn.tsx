@@ -1,5 +1,5 @@
 "use client";
-import { PencilIcon, ShareIcon, TrashIcon } from "lucide-react"
+import { Archive, PencilIcon, TrashIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -10,12 +10,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { EllipsisVertical } from "lucide-react"
-import { DeleteModal } from "./DeleteModal";
+import { DeleteModal } from "./modals/DeleteModal";
 import { useState } from "react";
+import { ArchiveModal } from "./modals/ArchiveModal";
 
-const CardBtn = ({ bookmarkId }: { bookmarkId: number   }) => {
+const CardBtn = ({ bookmarkId, bookmarkArchived }: { bookmarkId: number; bookmarkArchived: boolean }) => {
 
-    const [dialogOpen, setDialogOpen] = useState(false);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [archiveDialogOpen, setArchiveDialogOpen] = useState(false);
 
   return (
     <>
@@ -31,9 +33,12 @@ const CardBtn = ({ bookmarkId }: { bookmarkId: number   }) => {
             <PencilIcon />
             Edit
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <ShareIcon />
-            Share
+          <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => setArchiveDialogOpen(true)}
+          >
+            <Archive />
+            {bookmarkArchived ? "Unarchive" : "Archive"}
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
@@ -42,7 +47,7 @@ const CardBtn = ({ bookmarkId }: { bookmarkId: number   }) => {
           <DropdownMenuItem 
           className="cursor-pointer" 
           variant="destructive" 
-          onClick={() => setDialogOpen(true)}>
+          onClick={() => setDeleteDialogOpen(true)}>
             <TrashIcon />
             Delete
           </DropdownMenuItem>
@@ -53,8 +58,13 @@ const CardBtn = ({ bookmarkId }: { bookmarkId: number   }) => {
 
       {/* Modals */}
         <DeleteModal 
-          dialogOpen={dialogOpen}
-          setDialogOpen={setDialogOpen}
+          deleteDialogOpen={deleteDialogOpen}
+          setDeleteDialogOpen={setDeleteDialogOpen}
+          bookmarkId={bookmarkId!}
+        />
+        <ArchiveModal 
+          archiveDialogOpen={archiveDialogOpen}
+          setArchiveDialogOpen={setArchiveDialogOpen}
           bookmarkId={bookmarkId!}
         />
     </>

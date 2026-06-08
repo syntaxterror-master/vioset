@@ -11,15 +11,15 @@ import {
 import { deleteBookmark } from "@/app/actions/bookmark"
 
 export function DeleteModal({
-  dialogOpen, setDialogOpen, bookmarkId 
+  deleteDialogOpen, setDeleteDialogOpen, bookmarkId 
   }: {
-  dialogOpen: boolean, 
-  setDialogOpen: (open: boolean) => void, 
+  deleteDialogOpen: boolean, 
+  setDeleteDialogOpen: (open: boolean) => void, 
   bookmarkId: number
 }) {
 
   return (
-    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+    <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
       <form>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
@@ -36,7 +36,7 @@ export function DeleteModal({
             className="cursor-pointer" 
             onClick={() => {
               deleteBookmark(bookmarkId)
-              setDialogOpen(false)
+              setDeleteDialogOpen(false)
             }}
             variant="destructive">
               Delete

@@ -101,3 +101,26 @@ export async function deleteBookmark(bookmarkId: number) {
     console.log(error);
   }
 }
+
+export async function archiveBookmark(bookmarkId: number) {
+  const session = await auth.api.getSession({
+    headers: await headers()
+   })
+
+  if(!session?.user) {
+    throw new Error("Unauthorized")
+  }
+
+  try {
+    await prisma.bookmark.update({
+      where: {
+        id: bookmarkId
+      },
+      data: {
+        archived: true
+      }
+    })
+  } catch (error) {
+    console.log(error);
+  }
+}

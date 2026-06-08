@@ -1,5 +1,5 @@
 import SortBtn from "@/components/dashboard/SortBtn"
-import { AddBtn } from "@/components/dashboard/AddBtn"
+import { AddBtn } from "@/components/dashboard/modals/CreateModal"
 import BookmarkList from "@/components/dashboard/BookmarkList"
 
 const  Dashboard = async () => {

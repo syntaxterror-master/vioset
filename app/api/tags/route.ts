@@ -16,7 +16,13 @@ export async function GET(){
     where: {authorId: session.user.id},
     include: {
       _count: {
-        select: { bookmarks: true }
+        select: { 
+          bookmarks: {
+            where: {
+              archived: false
+            }
+          }
+        }
       }
     }
   })

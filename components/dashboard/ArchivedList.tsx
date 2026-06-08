@@ -27,8 +27,8 @@ const BookmarkList = () => {
 
   useEffect(() => {
     const url = activeTag
-    ? `/api/bookmark?tag=${activeTag}`
-    : "/api/bookmark"
+    ? `/api/archive?tag=${activeTag}`
+    : "/api/archive"
 
     fetch(url)
     .then(res => res.json())
