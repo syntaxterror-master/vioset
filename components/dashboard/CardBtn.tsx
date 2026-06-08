@@ -66,6 +66,7 @@ const CardBtn = ({ bookmarkId, bookmarkArchived }: { bookmarkId: number; bookmar
           archiveDialogOpen={archiveDialogOpen}
           setArchiveDialogOpen={setArchiveDialogOpen}
           bookmarkId={bookmarkId!}
+          bookmarkArchived={bookmarkArchived}
         />
     </>
   )

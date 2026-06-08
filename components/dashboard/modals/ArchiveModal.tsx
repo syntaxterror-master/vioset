@@ -9,15 +9,18 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { archiveBookmark } from "@/app/actions/bookmark"
+import { unarchiveBookmark } from "@/app/actions/bookmark"
 
 export function ArchiveModal({ 
   archiveDialogOpen, 
   setArchiveDialogOpen,
-  bookmarkId
+  bookmarkId,
+  bookmarkArchived
 }: { 
   archiveDialogOpen: boolean, 
   setArchiveDialogOpen: (open: boolean) => void
   bookmarkId: number
+  bookmarkArchived: boolean
 }) {
 
   return (
@@ -25,9 +28,9 @@ export function ArchiveModal({
       <form>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
-            <DialogTitle>Archive Bookmark</DialogTitle>
+            <DialogTitle>{bookmarkArchived ? "Unarchive" : "Archive"} Bookmark</DialogTitle>
             <DialogDescription>
-              Are you sure you want to archive this bookmark? You can always restore it later from the archive section.
+              Are you sure you want to {bookmarkArchived ? "unarchive" : "archive"} this bookmark? You can always restore it later from the archive section.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -37,11 +40,15 @@ export function ArchiveModal({
             <Button 
             className="cursor-pointer"
             onClick={async () => {
-              archiveBookmark(bookmarkId);
+              if (bookmarkArchived) {
+                await unarchiveBookmark(bookmarkId);
+              } else {
+                await archiveBookmark(bookmarkId);
+              }
               setArchiveDialogOpen(false);
             }}
             >
-              Archive
+              {bookmarkArchived ? "Unarchive" : "Archive"}
             </Button>
           </DialogFooter>
         </DialogContent>

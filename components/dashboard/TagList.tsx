@@ -37,6 +37,8 @@ const handleTagClick = (tagTitle: string) => {
 
 const [ tags, setTags ] = useState<tags[]>([])
 
+const totalBookmarks = tags.reduce((sum, t) => sum + (t._count?.bookmarks || 0), 0)
+
 useEffect(() => {
   fetch("/api/tags")
   .then(res => res.json())
@@ -54,12 +56,13 @@ useEffect(() => {
 
               <SidebarMenuItem> 
               <FieldGroup className="mx-auto w-56">
-              <RadioGroup  className="w-fit">
+              <RadioGroup className="w-fit">
               
               <div className="flex">
               <Field orientation="horizontal">
               <div className="flex items-center gap-3">
-              <RadioGroupItem 
+              <RadioGroupItem
+              checked={!activeTag}
               onClick={() => router.push('/dashboard')} 
               value="all"
               id="r1" />
@@ -68,7 +71,7 @@ useEffect(() => {
               </Field>
               <div className="bg-accent flex items-center justify-center rounded-full h-7 w-7">
               <p>
-              {tags.length}
+              {totalBookmarks}
               </p>
               </div>
               

@@ -4,8 +4,8 @@ import Image from 'next/image'
 import { Separator } from '../ui/separator'
 import { Eye, Calendar } from "lucide-react"
 import { useEffect, useState } from 'react';
-import EmptyComponent from './Empty';
 import { useSearchParams } from 'next/navigation';
+import ArchiveEmptyComponent from './ArchiveEmpty';
 
 interface Bookmark {
   id: number
@@ -96,7 +96,7 @@ const BookmarkList = () => {
       </section>
       )
      : (
-        <EmptyComponent />
+        <ArchiveEmptyComponent />
   )}
   </>
 )}
