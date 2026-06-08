@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id    String   @id
+  email String  @unique
+  name String
+	emailVerified Boolean
+	image String?
+	createdAt DateTime @db.Timestamptz(3)
+	updatedAt DateTime @db.Timestamptz(3)
+  bookmarks Bookmark[]
+	tags Tags[]
+	@@map("user")
+  sessions Session[]
+  accounts Account[]
+} 
+
+model Session {
+	id String @id
+	user User @relation(fields: [userId], references: [id])
+	userId String
+	token String @unique
+	expiresAt DateTime @db.Timestamptz(3)
+	ipAddress String?
+	userAgent String?
+	createdAt DateTime @db.Timestamptz(3)
+	updatedAt DateTime @db.Timestamptz(3)
+	@@map("session")
+}
+
+model Account {
+	id String @id
+	user User @relation(fields: [userId], references: [id])
+	userId String
+	accountId String
+	providerId String
+	accessToken String?
+	refreshToken String?
+	accessTokenExpiresAt DateTime? @db.Timestamptz(3)
+	refreshTokenExpiresAt DateTime? @db.Timestamptz(3)
+	scope String?
+	idToken String?
+	password String?
+	createdAt DateTime @db.Timestamptz(3)
+	updatedAt DateTime @db.Timestamptz(3)
+	@@map("account")
+}
+
+model Verification {
+	id String @id
+	identifier String
+	value String
+	expiresAt DateTime @db.Timestamptz(3)
+	createdAt DateTime @db.Timestamptz(3)
+	updatedAt DateTime @db.Timestamptz(3)
+	@@map("verification")
+}
+
+model Bookmark { 
+  id        Int     @id @default(autoincrement()) 
+  title     String
+  url String
+  description  String?
+	content String?
+	archived Boolean @default(false)
+  image String?
+  previews Int @default(0)
+  createdAt DateTime @default(now())
+  author  User  @relation(fields: [authorId], references: [id])
+  authorId  String
+  tags Tags[] @relation("BookmarkTags")
+} 
+
+model Tags {
+  id   Int @id @default(autoincrement())
+  title String
+  author  User  @relation(fields: [authorId], references: [id])
+  authorId  String
+  bookmarks Bookmark[] @relation("BookmarkTags")
+
+	@@unique([title, authorId])
+}

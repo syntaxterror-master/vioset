@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Bookmark" ADD COLUMN     "archived" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "content" TEXT;
