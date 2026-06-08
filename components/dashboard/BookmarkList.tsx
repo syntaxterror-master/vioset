@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import EmptyComponent from './Empty';
 import { useSearchParams } from 'next/navigation';
 import { useRefresh } from './RefreshProvider';
+import  Link from "next/link";
 
 interface Bookmark {
   id: number
@@ -43,7 +44,8 @@ const BookmarkList = () => {
     {bookmarks.length > 0 ? (
     <section  className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 py-8'>
       {bookmarks.map((bookmark) => (
-        <div key={bookmark.id} className='bg-background'>
+        <Link href={`/dashboard/bookmark/${bookmark.id}`} key={bookmark.id}>
+        <div className='bg-background'>
         <div className='flex p-6 justify-between items-start'>
         <div className='flex gap-5'>
         <div className='rounded-4-xl px-2 rounded-4xl'>
@@ -95,6 +97,7 @@ const BookmarkList = () => {
           </div>
         </div>
       </div>
+      </Link>
       ))}
       </section>
       )

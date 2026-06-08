@@ -3,6 +3,11 @@ import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import prisma from "@/lib/prisma"
 import ogs from "open-graph-scraper"
+import * as cheerio from "cheerio"
+import { GoogleGenerativeAI } from "@google/generative-ai"
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
+const model = genAI.getGenerativeModel({model: "gemini-3.5-flash"})
 
 export async function createBookmark(formData: FormData) {
      const session = await auth.api.getSession({
@@ -30,7 +35,20 @@ export async function createBookmark(formData: FormData) {
     if(!data){
       throw new Error("Error occured while creating BookMark")
     }
-    // console.log(data.html);
+    
+    const $ = cheerio.load(data.html?.toString() ?? "")
+    $("script, style, nav, header, footer").remove()
+    const cleanText = $("body").text().replace(/\s+/g, " ").trim().slice(0, 5000)
+
+    const result = await model.generateContent(
+    `Generate a concise summary (max 500 characters) for the following webpage content:\n\n${cleanText}`
+    )
+
+    if(!result){
+      throw new Error("Error occured while creating BookMark")
+    }
+
+    const aiSummary = result.response.text()
     
     await prisma.bookmark.create({
       data: {
@@ -39,7 +57,7 @@ export async function createBookmark(formData: FormData) {
         url:  data.result.ogUrl?.trim() || url.toString(),
         authorId: session?.user.id,
         image: data.result.ogImage?.[0].url ?? "",
-        content: data.html,
+        content: aiSummary,
         tags: {
           connectOrCreate: {
             where: {
