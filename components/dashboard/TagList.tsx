@@ -12,7 +12,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "../ui/label";
 import { Field, FieldGroup } from "@/components/ui/field"
 import { useState, useEffect } from "react"
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
   interface tags {
     id: number
@@ -26,6 +26,7 @@ const TagList = () => {
 const router = useRouter()
 const searchParams = useSearchParams()
 const activeTag = searchParams.get("tag")
+const pathname = usePathname()
 
 const handleTagClick = (tagTitle: string) => {
   if(activeTag === tagTitle) {
@@ -40,10 +41,11 @@ const [ tags, setTags ] = useState<tags[]>([])
 const totalBookmarks = tags.reduce((sum, t) => sum + (t._count?.bookmarks || 0), 0)
 
 useEffect(() => {
-  fetch("/api/tags")
+  const isArchived= pathname.includes("archive")
+  fetch(`/api/tags?archived=${isArchived}`)
   .then(res => res.json())
   .then(setTags)
-}, [])
+}, [pathname])
 
 
 
@@ -58,7 +60,7 @@ useEffect(() => {
               <FieldGroup className="mx-auto w-56">
               <RadioGroup className="w-fit">
               
-              <div className="flex">
+              <div className="flex items-center justify-between w-55">
               <Field orientation="horizontal">
               <div className="flex items-center gap-3">
               <RadioGroupItem
@@ -77,9 +79,9 @@ useEffect(() => {
               
               </div>
               {tags.map((tag) => (
-              <div key={tag.id} className="flex">
-              <Field orientation="horizontal">
-
+                tag._count.bookmarks > 0 &&           
+              <div key={tag.id} className="flex items-center justify-between w-55">
+              <Field orientation="responsive">
               <div className="flex items-center gap-3">
               <RadioGroupItem 
               onClick={() => handleTagClick(tag.title)} 

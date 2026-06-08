@@ -3,7 +3,10 @@ import { headers } from "next/headers"
 import prisma from "@/lib/prisma"
 import { NextResponse } from "next/server"
 
-export async function GET(){
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url)
+  const archived = searchParams.get("archived") === "true"
+
   const session = await auth.api.getSession({
     headers: await headers()
   })
@@ -12,6 +15,7 @@ export async function GET(){
     throw new Error("Unauthorized")
   }
 
+
   const tags = await prisma.tags.findMany({
     where: {authorId: session.user.id},
     include: {
@@ -19,7 +23,7 @@ export async function GET(){
         select: { 
           bookmarks: {
             where: {
-              archived: false
+              archived: archived
             }
           }
         }

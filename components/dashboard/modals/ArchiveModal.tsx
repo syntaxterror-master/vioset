@@ -10,18 +10,21 @@ import {
 } from "@/components/ui/dialog"
 import { archiveBookmark } from "@/app/actions/bookmark"
 import { unarchiveBookmark } from "@/app/actions/bookmark"
+import { useRefresh } from "../RefreshProvider"
 
 export function ArchiveModal({ 
   archiveDialogOpen, 
   setArchiveDialogOpen,
   bookmarkId,
-  bookmarkArchived
+  bookmarkArchived,
 }: { 
   archiveDialogOpen: boolean, 
   setArchiveDialogOpen: (open: boolean) => void
   bookmarkId: number
   bookmarkArchived: boolean
 }) {
+
+const { refresh } = useRefresh()
 
   return (
     <Dialog open={archiveDialogOpen} onOpenChange={setArchiveDialogOpen}>
@@ -42,10 +45,12 @@ export function ArchiveModal({
             onClick={async () => {
               if (bookmarkArchived) {
                 await unarchiveBookmark(bookmarkId);
+                refresh() // Refresh the bookmark list after unarchiving
               } else {
                 await archiveBookmark(bookmarkId);
               }
               setArchiveDialogOpen(false);
+              refresh() // Refresh the bookmark list after archiving/unarchiving
             }}
             >
               {bookmarkArchived ? "Unarchive" : "Archive"}

@@ -6,6 +6,7 @@ import { Eye, Calendar } from "lucide-react"
 import { useEffect, useState } from 'react';
 import EmptyComponent from './Empty';
 import { useSearchParams } from 'next/navigation';
+import { useRefresh } from './RefreshProvider';
 
 interface Bookmark {
   id: number
@@ -16,6 +17,7 @@ interface Bookmark {
   previews: number
   createdAt: Date
   archived: boolean
+  refresh: () => void
   tags: []
 }
 
@@ -24,6 +26,7 @@ const BookmarkList = () => {
   const searchParams = useSearchParams()
   const activeTag = searchParams.get("tag")
   const [ bookmarks, setBookmarks ] = useState<Bookmark[]>([])
+  const { refreshKey } = useRefresh()
 
   useEffect(() => {
     const url = activeTag
@@ -33,7 +36,7 @@ const BookmarkList = () => {
     fetch(url)
     .then(res => res.json())
     .then(setBookmarks)
-  }, [activeTag])
+  }, [activeTag, refreshKey])
   
     return (
       <>

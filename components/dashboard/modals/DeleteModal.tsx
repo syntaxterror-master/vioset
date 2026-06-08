@@ -9,14 +9,17 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { deleteBookmark } from "@/app/actions/bookmark"
+import { useRefresh } from "../RefreshProvider"
 
 export function DeleteModal({
-  deleteDialogOpen, setDeleteDialogOpen, bookmarkId 
+  deleteDialogOpen, setDeleteDialogOpen, bookmarkId
   }: {
   deleteDialogOpen: boolean, 
   setDeleteDialogOpen: (open: boolean) => void, 
-  bookmarkId: number
+  bookmarkId: number,
 }) {
+
+  const { refresh } = useRefresh()
 
   return (
     <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
@@ -37,6 +40,7 @@ export function DeleteModal({
             onClick={() => {
               deleteBookmark(bookmarkId)
               setDeleteDialogOpen(false)
+              refresh()
             }}
             variant="destructive">
               Delete

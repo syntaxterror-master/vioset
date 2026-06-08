@@ -14,7 +14,7 @@ import { DeleteModal } from "./modals/DeleteModal";
 import { useState } from "react";
 import { ArchiveModal } from "./modals/ArchiveModal";
 
-const CardBtn = ({ bookmarkId, bookmarkArchived }: { bookmarkId: number; bookmarkArchived: boolean }) => {
+const CardBtn = ({ bookmarkId, bookmarkArchived }: { bookmarkId: number; bookmarkArchived: boolean; }) => {
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [archiveDialogOpen, setArchiveDialogOpen] = useState(false);
